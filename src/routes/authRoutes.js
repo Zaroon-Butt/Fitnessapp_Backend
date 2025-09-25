@@ -223,89 +223,89 @@ router.post("/reset-password", async (req, res) => {
 });
 
 // ------------------- Google Sign-In (Existing Users) -------------------
-router.post("/google-signin", async (req, res) => {
-  try {
-    const { email, googleId, name } = req.body;
+// router.post("/google-signin", async (req, res) => {
+//   try {
+//     const { email, googleId, name } = req.body;
 
-    if (!email || !googleId) {
-      return sendError(res, 400, "Email and Google ID are required");
-    }
+//     if (!email || !googleId) {
+//       return sendError(res, 400, "Email and Google ID are required");
+//     }
 
-    // Check if user exists
-    const user = await User.findOne({ email });
-    if (!user) {
-      return sendError(res, 404, "User not found. Please sign up first.");
-    }
+//     // Check if user exists
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return sendError(res, 404, "User not found. Please sign up first.");
+//     }
 
-    // Generate token
-    const token = generateToken(user);
+//     // Generate token
+//     const token = generateToken(user);
 
-    res.status(200).json({
-      message: "Google sign-in successful",
-      user,
-      token,
-    });
-  } catch (error) {
-    console.error("Google Sign-In Error:", error);
-    sendError(res, 500, "Internal Server Error");
-  }
-});
+//     res.status(200).json({
+//       message: "Google sign-in successful",
+//       user,
+//       token,
+//     });
+//   } catch (error) {
+//     console.error("Google Sign-In Error:", error);
+//     sendError(res, 500, "Internal Server Error");
+//   }
+// });
 
 // ------------------- Google Sign-Up (New Users) -------------------
-router.post("/google-signup", async (req, res) => {
-  try {
-    const { 
-      email, 
-      googleId, 
-      name, 
-      Gender, 
-      Age, 
-      Height, 
-      Goal, 
-      ActivityLevel, 
-      Weight 
-    } = req.body;
+// router.post("/google-signup", async (req, res) => {
+//   try {
+//     const { 
+//       email, 
+//       googleId, 
+//       name, 
+//       Gender, 
+//       Age, 
+//       Height, 
+//       Goal, 
+//       ActivityLevel, 
+//       Weight 
+//     } = req.body;
 
-    // Check required fields
-    if (!email || !googleId || !Gender || !Age || !Height || !Goal || !ActivityLevel || !Weight) {
-      return sendError(res, 400, "All fields are required");
-    }
+//     // Check required fields
+//     if (!email || !googleId || !Gender || !Age || !Height || !Goal || !ActivityLevel || !Weight) {
+//       return sendError(res, 400, "All fields are required");
+//     }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return sendError(res, 400, "User already exists. Please sign in instead.");
-    }
+//     // Check if user already exists
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) {
+//       return sendError(res, 400, "User already exists. Please sign in instead.");
+//     }
 
-    // Create new user with Google authentication
-    // For Google users, we'll use a placeholder password since they authenticate via Google
-    const user = new User({ 
-      email, 
-      password: `google_auth_${googleId}`, // Placeholder password for Google users
-      Gender, 
-      Age, 
-      Height, 
-      Goal, 
-      ActivityLevel, 
-      Weight,
-      googleId,
-      authProvider: 'google'
-    });
+//     // Create new user with Google authentication
+//     // For Google users, we'll use a placeholder password since they authenticate via Google
+//     const user = new User({ 
+//       email, 
+//       password: `google_auth_${googleId}`, // Placeholder password for Google users
+//       Gender, 
+//       Age, 
+//       Height, 
+//       Goal, 
+//       ActivityLevel, 
+//       Weight,
+//       googleId,
+//       authProvider: 'google'
+//     });
     
-    await user.save();
+//     await user.save();
 
-    // Generate token
-    const token = generateToken(user);
+//     // Generate token
+//     const token = generateToken(user);
 
-    res.status(201).json({
-      message: "Google sign-up successful",
-      user,
-      token,
-    });
-  } catch (error) {
-    console.error("Google Sign-Up Error:", error);
-    sendError(res, 500, "Internal Server Error");
-  }
-});
+//     res.status(201).json({
+//       message: "Google sign-up successful",
+//       user,
+//       token,
+//     });
+//   } catch (error) {
+//     console.error("Google Sign-Up Error:", error);
+//     sendError(res, 500, "Internal Server Error");
+//   }
+// });
 
 export default router;

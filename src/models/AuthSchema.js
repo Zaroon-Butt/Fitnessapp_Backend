@@ -25,11 +25,12 @@ const userSchema = new mongoose.Schema(
     resetPasswordOTP: { type: String },
     resetPasswordOTPExpires: { type: Date },
     googleId: { type: String }, // For Google-authenticated users
-    authProvider: { type: String, enum: ['local', 'google'], default: 'local' }, // Track auth method
+    // authProvider: { type: String, enum: ['local', 'google'], default: 'local' }, // Track auth method
   },
   { timestamps: true } // Adds createdAt & updatedAt automatically
 );
 
+// Hash password before saving
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   try {
