@@ -301,11 +301,40 @@ router.post("/reset-password", async (req, res) => {
 //       message: "Google sign-up successful",
 //       user,
 //       token,
-//     });
+//       });
 //   } catch (error) {
 //     console.error("Google Sign-Up Error:", error);
 //     sendError(res, 500, "Internal Server Error");
 //   }
 // });
+
+// ------------------- Update Pro Status -------------------
+router.patch("/updateIsPro", async (req, res) => {
+  try {
+    const { userId, isPro } = req.body;
+
+    if (!userId || typeof isPro !== 'boolean') {
+      return sendError(res, 400, "User ID and isPro status (boolean) are required");
+    }
+
+    // Find and update user by ID
+    const user = await User.findByIdAndUpdate(userId, { isPro }, { new: true }); // Return updated document
+    if (!user) {
+      return sendError(res, 404, "User not found");
+    }
+
+    res.status(200).json({
+      message: "Pro status updated successfully",
+      user: {
+        id: user._id,
+        email: user.email,
+        isPro: user.isPro
+      }
+    });
+  } catch (error) {
+    console.error("Update Pro Status Error:", error);
+    sendError(res, 500, "Internal Server Error");
+  }
+});
 
 export default router;
